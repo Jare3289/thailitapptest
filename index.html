@@ -61,3 +61,1478 @@
 
 </head>
 <!-- --- END SECTION: HEAD --- -->
+<!-- --- SECTION: CSS / สไตล์หลัก (replace existing style block or styles.css content) --- -->
+<style>
+  /* ---------- ส่วนกำหนดฟอนต์หลัก ---------- */
+  /* ฟอนต์ไทยที่อ่านง่าย เหมาะกับโคลงและคำไทย */
+  :root {
+    font-family: "Noto Sans Thai", "Sarabun", sans-serif;
+    font-size: 16px;
+    color: #222;
+    background-color: #fff;
+  }
+
+  /* ---------- โครงร่างทั่วไปของหน้า ---------- */
+  body {
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    background-color: #fafafa;
+  }
+
+  /* ---------- กล่องโคลง ---------- */
+  .kloang-container {
+    max-width: 700px;
+    margin: 1.5rem auto;
+    padding: 1.5rem;
+    background: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    white-space: pre-wrap;
+  }
+
+  /* ---------- โครงของแต่ละบาทโคลง ---------- */
+  .bart {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ---------- คำหน้าบาท (wak-na) ---------- */
+  .wak-na {
+    font-weight: 600;
+    color: #111;
+    margin-right: 0.75rem;
+    min-width: 160px;
+  }
+
+  /* ---------- คำหลังบาท (wak-lang) ---------- */
+  .wak-lang {
+    color: #444;
+    font-weight: 400;
+    flex: 1;
+  }
+
+  /* ---------- คำศัพท์ยาก (hardword) ---------- */
+  .hardword {
+    text-decoration: underline dotted #c56;
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+    color: #b91c1c;
+    font-weight: 600;
+  }
+
+  /* เมื่อเอาเมาส์ไปวางบนคำศัพท์ยาก */
+  .hardword:hover {
+    color: #dc2626;
+    text-shadow: 0 0 3px rgba(220, 38, 38, 0.3);
+  }
+
+  /* ---------- พื้นที่แสดงความหมายคำยาก ---------- */
+  #hardword-info {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 0.75rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    display: none; /* จะเปิดเมื่อคลิกคำยาก */
+  }
+
+  /* ---------- การ์ดรูปภาพคำศัพท์ (ถ้ามีรูปภาพคำยาก) ---------- */
+  .hardword-image {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    margin: 0.75rem auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* ---------- ปุ่มทั่วไป ---------- */
+  button {
+    background: #2563eb;
+    color: #fff;
+    font-weight: 500;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  button:hover {
+    background: #1d4ed8;
+  }
+
+  /* ---------- Responsive (มือถือ) ---------- */
+  @media (max-width: 640px) {
+    .kloang-container {
+      margin: 1rem;
+      padding: 1rem;
+      font-size: 0.95rem;
+    }
+    .wak-na {
+      min-width: 120px;
+    }
+  }
+</style>
+<!-- --- END SECTION: CSS --- -->
+// --- SECTION: MISSION_DATA (replace existing mission/MISSION_01 object) ---
+// วางทับบล็อก mission หรือ MISSION_DATA.MISSION_01 เดิมในไฟล์ของคุณ
+const MISSION_DATA = {
+  MISSION_01: {
+    // ชื่อภารกิจ / metadata
+    id: "MISSION_01",
+    title: "ถอดความโคลง: สมเด็จพระสุริโยทัย",
+    // ---------- POEM (HTML template) ----------
+    // โคลงเก็บเป็น HTML string — คำที่ต้องการให้เป็น wak-lang อยู่ใน <span class="wak-lang">
+    // คำยากทั้ง 5 ถูกห่อด้วย <span class="hardword" data-word="...">...</span> เพื่อให้ระบบจับคลิกและแสดงความหมายได้
+    poem: `<div class="kloang-container">
+  <div class="bart">
+    <span class="wak-na">๏ บังอรอัคเรศผู้</span>
+    <span class="wak-lang">พิสมัย ท่านนา</span>
+  </div>
+
+  <div class="bart">
+    <span class="wak-na">นามพระสุริโยทัย</span>
+    <span class="wak-lang">ออกอ้าง</span>
+  </div>
+
+  <div class="bart">
+    <span class="wak-na">ทรงเครื่องยุทธพิไชย</span>
+    <span class="wak-lang">เช่นอุป ราชแฮ</span>
+  </div>
+
+  <div class="bart">
+    <span class="wak-na">เถลิงคชาธารคว้าง</span>
+    <span class="wak-lang">
+      ควบเข้าขบวน
+      <span class="hardword" data-word="ไคล">ไคล</span>
+    </span>
+  </div>
+
+  <div style="height:0.6rem"></div>
+
+  <div class="bart">
+    <span class="wak-na">๏ พลไกรกองน่าเร้า</span>
+    <span class="wak-lang">
+      <span class="hardword" data-word="โรมรัน">โรมรัน</span>
+      กันเฮย
+    </span>
+  </div>
+
+  <div class="bart">
+    <span class="wak-na">ช้างพระเจ้าแปรประจัญ</span>
+    <span class="wak-lang">คชไท้</span>
+  </div>
+
+  <div class="bart">
+    <span class="wak-na">สารทรงซวดเซผัน</span>
+    <span class="wak-lang">หลังแล่น เตลิดแฮ</span>
+  </div>
+
+  <div class="bart">
+    <span class="wak-na">เตลงขับคชไล่ใกล้</span>
+    <span class="wak-lang">
+      หวิดท้ายคชาธาร
+      <span class="hardword" data-word="หวิด">หวิด</span>
+    </span>
+  </div>
+
+  <div style="height:0.5rem"></div>
+
+  <div class="bart">
+    <span class="wak-na">
+      (<span class="hardword" data-word="ทรงเครื่อง">ทรงเครื่อง</span>,
+      <span class="hardword" data-word="พล">พล</span>)
+    </span>
+  </div>
+
+  <!-- พื้นที่แสดงคำอธิบาย/รูปของคำยากเมื่อคลิก -->
+  <div id="hardword-info" aria-live="polite"></div>
+</div>`,
+
+    // ---------- hardWords (คำยาก 5 คำ) ----------
+    // keys = คำ (ต้องตรงกับ data-word ใน poem) ; value = object { meaning, points, imageURL }
+    hardWords: {
+      "ทรงเครื่อง": {
+        meaning: "แต่งตัวมีเครื่องประดับ/แต่งกายพร้อมสำหรับพิธีหรือออกศึก",
+        points: 15,
+        imageURL: "https://img5.pic.in.th/file/secure-sv1/Gemini_Generated_Image_l358mtl358mtl358.png"
+      },
+      "ไคล": {
+        meaning: "เคลื่อนที่เข้าไป, ไปเข้าไป, เข้าสู่",
+        points: 12,
+        imageURL: "https://img2.pic.in.th/pic/Gemini_Generated_Image_got62vgot62vgot6.png"
+      },
+      "โรมรัน": {
+        meaning: "รบพุ่งกันอย่างดุเดือด, ปะทะกันในสนามรบ",
+        points: 18,
+        imageURL: "https://img2.pic.in.th/pic/Gemini_Generated_Image_m7s5sjm7s5sjm7s554828c3ed7e1f8ba.png"
+      },
+      "พล": {
+        meaning: "ทหาร, กำลังพล, ฝ่ายทหาร",
+        points: 10,
+        imageURL: "https://img2.pic.in.th/pic/Gemini_Generated_Image_sbsxfqsbsxfqsbsx.png"
+      },
+      "หวิด": {
+        meaning: "เฉียด, จวนเจียน, เกือบจะเกิดขึ้น",
+        points: 14,
+        imageURL: "https://img5.pic.in.th/file/secure-sv1/Gemini_Generated_Image_nofldgnofldgnofl409e8c1c02a80669.png"
+      }
+    },
+
+    // ---------- รูปหลักสำหรับหน้า (ภาพเปิด) ----------
+    officialImageURL: "https://img5.pic.in.th/file/secure-sv1/Gemini_Generated_Image_s8u7sts8u7sts8u7.png",
+    officialImageDescription: "ภาพประกอบหน้า: สมเด็จพระสุริโยทัยทรงช้างเข้ารบ",
+
+    // ---------- ข้อความตีความที่ถือเป็นคำตอบถูกต้อง (ใช้สำหรับให้คะแนนแบบอัตโนมัติหรืออ้างอิง) ----------
+    correctInterpretation: "สมเด็จพระสุริโยทัย พระมเหสีของสมเด็จพระมหาจักรพรรดิ ได้แต่งองค์ทรงเครื่องเหมือนกับผู้ชายเป็นชุดออกศึกเหมือนมหาอุปราชแล้วทรงช้างเข้าร่วมรบ กองทัพหน้าของทั้งสองฝ่ายต่อสู้กัน ระหว่างช้างทรงของพระเจ้าแปร กับช้างของพระมหาจักรพรรดิ แต่ช้างของพระมหาจักรพรรดิเสียที พระเจ้าแปรขับช้างไล่ขวิดท้ายช้างพระที่นั่งของพระมหาจักรพรรดิ",
+
+    // ---------- คำหลักที่ใช้ในการให้คะแนน/ตรวจ (ช่วยระบบ match keyword) ----------
+    correctInterpretationKeywords: [
+      "สมเด็จพระสุริโยทัย", "พระมเหสี", "ทรงเครื่อง", "ทรงช้าง", "ช้าง", "พระเจ้าแปร",
+      "กองทัพ", "รบ", "ไล่ขวิด", "ท้ายช้าง", "พระที่นั่ง"
+    ],
+
+    // ---------- คำถามวัดความเข้าใจ (comprehension questions) ----------
+    comprehensionQuestions: [
+      {
+        question: "จากการถอดความ สมเด็จพระสุริโยทัยทรงมีความรู้สึกอย่างไรต่อพระราชสามี",
+        options: ["เกรงกลัว", "เกรงใจและห่วงใย", "โกรธแค้น", "เฉยเมย"],
+        correct: 1
+      },
+      {
+        question: "เหตุใดสมเด็จพระสุริโยทัยจึงตัดสินใจขับช้างเข้าสู่การรบ",
+        options: ["เพื่อแสดงความกล้าหาญ", "เพื่อช่วยเหลือพระราชสามี", "เพื่อต่อสู้กับศัตรู", "เพื่อปกป้องแผ่นดิน"],
+        correct: 1
+      },
+      {
+        question: "คำว่า 'ไคล' ในบริบทโคลงนี้มีความหมายว่าอย่างไร",
+        options: ["เดินไป", "เข้าไป/เคลื่อนเข้าไป", "หนี", "ยืนอยู่เฉยๆ"],
+        correct: 1
+      },
+      {
+        question: "จากบรรทัด 'เตลงขับคชไล่ใกล้ หวิดท้ายคชาธาร' สื่อว่าอะไร",
+        options: ["ช้างไล่ขวิดจนชนะ", "ช้างไล่เฉียด/เกือบขวิดท้ายช้างพระที่นั่ง", "ช้างหลงทาง", "ช้างถอยกลับ"],
+        correct: 1
+      }
+    ]
+
+  } // end MISSION_01
+}; // end MISSION_DATA
+// --- END SECTION: MISSION_DATA ---
+// --- SECTION: POEM (replace existing poem: `...`) ---
+// วางแทนค่า poem (template string) ของ mission เดิมในไฟล์ของคุณ
+poem: `<div class="kloang-container" role="article" aria-label="โคลงสมเด็จพระสุริโยทัย">
+  <!-- บทที่ 1 -->
+  <div class="bart">
+    <span class="wak-na">๏ บังอรอัคเรศผู้</span>
+    <!-- พิสมัย ท่านนา เป็น wak-lang ตามต้นฉบับ -->
+    <span class="wak-lang">พิสมัย ท่านนา</span>
+  </div>
+
+  <!-- บทที่ 2 -->
+  <div class="bart">
+    <span class="wak-na">นามพระสุริโยทัย</span>
+    <span class="wak-lang">ออกอ้าง</span>
+  </div>
+
+  <!-- บทที่ 3 -->
+  <div class="bart">
+    <span class="wak-na">ทรงเครื่องยุทธพิไชย</span>
+    <span class="wak-lang">เช่นอุป ราชแฮ</span>
+  </div>
+
+  <!-- บทที่ 4 (มีคำยาก: ไคล) -->
+  <div class="bart">
+    <span class="wak-na">เถลิงคชาธารคว้าง</span>
+    <span class="wak-lang">
+      ควบเข้าขบวน
+      <!-- data-word ต้องตรงกับ key ใน hardWords -->
+      <span class="hardword" data-word="ไคล" aria-haspopup="true" aria-controls="hardword-info">ไคล</span>
+    </span>
+  </div>
+
+  <div style="height:0.6rem" aria-hidden="true"></div>
+
+  <!-- บทที่ 5 (มีคำยาก: โรมรัน) -->
+  <div class="bart">
+    <span class="wak-na">๏ พลไกรกองน่าเร้า</span>
+    <span class="wak-lang">
+      <span class="hardword" data-word="โรมรัน" aria-haspopup="true" aria-controls="hardword-info">โรมรัน</span>
+      กันเฮย
+    </span>
+  </div>
+
+  <!-- บทที่ 6 -->
+  <div class="bart">
+    <span class="wak-na">ช้างพระเจ้าแปรประจัญ</span>
+    <span class="wak-lang">คชไท้</span>
+  </div>
+
+  <!-- บทที่ 7 -->
+  <div class="bart">
+    <span class="wak-na">สารทรงซวดเซผัน</span>
+    <span class="wak-lang">หลังแล่น เตลิดแฮ</span>
+  </div>
+
+  <!-- บทที่ 8 (มีคำยาก: หวิด) -->
+  <div class="bart">
+    <span class="wak-na">เตลงขับคชไล่ใกล้</span>
+    <span class="wak-lang">
+      หวิดท้ายคชาธาร
+      <span class="hardword" data-word="หวิด" aria-haspopup="true" aria-controls="hardword-info">หวิด</span>
+    </span>
+  </div>
+
+  <div style="height:0.5rem" aria-hidden="true"></div>
+
+  <!-- บทสรุป (คำยาก: ทรงเครื่อง, พล) -->
+  <div class="bart">
+    <span class="wak-na">
+      (<span class="hardword" data-word="ทรงเครื่อง" aria-haspopup="true" aria-controls="hardword-info">ทรงเครื่อง</span>,
+      <span class="hardword" data-word="พล" aria-haspopup="true" aria-controls="hardword-info">พล</span>)
+    </span>
+  </div>
+
+  <!-- พื้นที่สำหรับแสดงความหมาย/รูปของคำยากเมื่อคลิก -->
+  <!-- JS helper จะเติมเนื้อหาและเปลี่ยน display เป็น block เมื่อต้องการ -->
+  <div id="hardword-info" class="hw-info" role="region" aria-live="polite"></div>
+</div>`,
+// --- SECTION: HARDWORDS (replace existing hardWords block) ---
+// รายการคำศัพท์ยาก 5 คำ พร้อมคำอธิบายและคะแนน (มีรูปประกอบ)
+hardWords: {
+  "ทรงเครื่อง": {
+    meaning: "แต่งตัวมีเครื่องประดับหรือแต่งกายพร้อมสำหรับพิธีหรือออกศึก",
+    points: 15,
+    imageURL: "https://img5.pic.in.th/file/secure-sv1/Gemini_Generated_Image_l358mtl358mtl358.png"
+  },
+  "ไคล": {
+    meaning: "เคลื่อนที่เข้าไป, ไปเข้าไป, เข้าสู่",
+    points: 12,
+    imageURL: "https://img2.pic.in.th/pic/Gemini_Generated_Image_got62vgot62vgot6.png"
+  },
+  "โรมรัน": {
+    meaning: "รบพุ่งกันอย่างดุเดือด, ปะทะกันในสนามรบ",
+    points: 18,
+    imageURL: "https://img2.pic.in.th/pic/Gemini_Generated_Image_m7s5sjm7s5sjm7s554828c3ed7e1f8ba.png"
+  },
+  "พล": {
+    meaning: "ทหาร, กำลังพล, ฝ่ายทหาร",
+    points: 10,
+    imageURL: "https://img2.pic.in.th/pic/Gemini_Generated_Image_sbsxfqsbsxfqsbsx.png"
+  },
+  "หวิด": {
+    meaning: "เฉียด, จวนเจียน, เกือบจะเกิดขึ้น",
+    points: 14,
+    imageURL: "https://img5.pic.in.th/file/secure-sv1/Gemini_Generated_Image_nofldgnofldgnofl409e8c1c02a80669.png"
+  }
+},
+// --- END SECTION: HARDWORDS ---
+// --- SECTION: HELPERS (HARDWORD) ---
+// ฟังก์ชันช่วยสำหรับคำยาก: ผูกคลิก, แสดงความหมาย, นับครั้งผิด, เปิดภาพเมื่อผิด >= 2
+(function () {
+  // เก็บจำนวนครั้งที่ตอบผิดสำหรับแต่ละคำ (in-memory)
+  const wrongCounts = {};
+
+  // ปรับ UI ของกล่อง info ให้เป็น visible และเติมเนื้อหา
+  function renderInfoHtml(word, hw, revealImage = false) {
+    if (!hw) return `<div class="hw-unknown">ไม่พบข้อมูลคำศัพท์: ${word}</div>`;
+    const safeMeaning = escapeHtml(hw.meaning || "ไม่มีความหมาย");
+    const img = hw.imageURL ? `<img src="${hw.imageURL}" alt="${escapeHtml(word)}" class="hardword-image">` : "";
+    // ถ้า revealImage = true แสดงรูปใหญ่ขึ้น (ใช้เมื่อผิด 2 ครั้ง)
+    const imgBlock = hw.imageURL
+      ? (revealImage
+          ? `<div style="text-align:center;margin-top:0.6rem">${img}</div>`
+          : `<div style="float:left;margin-right:0.75rem;width:120px">${img}</div>`)
+      : "";
+    return `
+      <div style="display:flex;gap:0.6rem;align-items:flex-start;max-width:720px;">
+        ${imgBlock}
+        <div style="flex:1">
+          <div style="font-weight:700;margin-bottom:0.4rem">${escapeHtml(word)}</div>
+          <div style="margin-bottom:0.6rem;white-space:normal">${safeMeaning}</div>
+          <div style="text-align:right"><button type="button" id="hw-close-btn">ปิด</button></div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ป้องกัน XSS เบา ๆ โดยแปลงตัวอักษรพิเศษก่อนแทรกใน innerHTML
+  function escapeHtml(str = "") {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  // ฟังก์ชันที่ทำหน้าที่แสดงกล่องข้อมูลคำศัพท์ (ปกติ: meaning + รูปย่อ)
+  function showHardwordInfo(word) {
+    const infoBox = document.getElementById("hardword-info");
+    if (!infoBox) return;
+    const hw = (typeof hardWords !== "undefined" && hardWords && hardWords[word]) ? hardWords[word] : null;
+    infoBox.innerHTML = renderInfoHtml(word, hw, false);
+    infoBox.style.display = "block";
+    // ผูกปุ่มปิด
+    const closeBtn = document.getElementById("hw-close-btn");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        infoBox.innerHTML = "";
+        infoBox.style.display = "none";
+      });
+    }
+    // ให้โฟกัสไปที่กล่องเพื่อ accessibility
+    infoBox.setAttribute("tabindex", "-1");
+    infoBox.focus();
+  }
+
+  // เมื่อผิดครบ threshold (2) ให้เปิดเผยรูปคำศัพท์ (ใหญ่ขึ้น)
+  function revealHardwordImage(word) {
+    const infoBox = document.getElementById("hardword-info");
+    if (!infoBox) return;
+    const hw = (typeof hardWords !== "undefined" && hardWords && hardWords[word]) ? hardWords[word] : null;
+    infoBox.innerHTML = renderInfoHtml(word, hw, true);
+    infoBox.style.display = "block";
+    const closeBtn = document.getElementById("hw-close-btn");
+    if (closeBtn) closeBtn.addEventListener("click", () => { infoBox.innerHTML = ""; infoBox.style.display = "none"; });
+    infoBox.setAttribute("tabindex", "-1");
+    infoBox.focus();
+  }
+
+  // เพิ่ม count เมื่อผู้เรียนตอบคำถามเกี่ยวกับ 'word' ผิด
+  // เรียกฟังก์ชันนี้จากจุดตรวจคำตอบของ quiz/game ของคุณ
+  function incrementWrongCount(word) {
+    if (!word) return;
+    if (!wrongCounts[word]) wrongCounts[word] = 0;
+    wrongCounts[word] += 1;
+    // ถ้าผิด >= 2 ครั้ง ให้เปิดเผยรูปคำศัพท์อัตโนมัติ
+    if (wrongCounts[word] >= 2) {
+      revealHardwordImage(word);
+    }
+  }
+
+  // ผูกเหตุการณ์คลิกให้ทุก <span class="hardword" data-word="...">
+  function bindHardwordClicks() {
+    document.querySelectorAll(".hardword").forEach(span => {
+      const w = span.dataset.word || span.getAttribute("data-word");
+      if (!w) return;
+      // ให้ pointer และ aria attributes
+      span.style.cursor = "pointer";
+      span.setAttribute("role", "button");
+      span.setAttribute("aria-pressed", "false");
+      span.addEventListener("click", () => {
+        showHardwordInfo(w);
+      });
+      // keyboard accessibility: Enter/Space triggers click
+      span.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter" || ev.key === " ") {
+          ev.preventDefault();
+          span.click();
+        }
+      });
+    });
+  }
+
+  // ฟังก์ชันช่วย: รีเซ็ตสถานะ wrongCounts (ถ้าต้องการเริ่มชุดใหม่)
+  function resetWrongCounts() {
+    for (const k in wrongCounts) { if (Object.prototype.hasOwnProperty.call(wrongCounts, k)) delete wrongCounts[k]; }
+  }
+
+  // ให้เรียกผูกคลิกเมื่อ DOM พร้อม
+  function init() {
+    // safety: delay binding ถ้า elements ถูก render แบบ dynamic
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", bindHardwordClicks);
+    } else {
+      bindHardwordClicks();
+    }
+  }
+
+  // Expose API ให้ส่วนอื่นเรียกใช้ (เช่น logic ตรวจคำตอบ)
+  window.hwHelpers = {
+    init,
+    bindHardwordClicks,
+    showHardwordInfo,
+    revealHardwordImage,
+    incrementWrongCount,
+    resetWrongCounts,
+    _debug_getWrongCounts: () => ({ ...wrongCounts })
+  };
+
+  // เรียก init อัตโนมัติ (ถ้าไฟล์ถูกโหลด)
+  init();
+})();
+ // --- END SECTION: HELPERS (HARDWORD) ---
+// --- SECTION: MATCHING GAME (matching game logic) ---
+// ฟังก์ชัน renderMatchingGame(containerId, options)
+// - containerId: id ของ element ที่จะวางเกม (string)
+// - options: { shuffleSeed?, onFinish? } (optional)
+// ใช้ hardWords global ที่นิยามใน SECTION: HARDWORDS
+(function () {
+  // ช่วยสุ่ม (Fisher-Yates)
+  function shuffleArray(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // สร้าง element การ์ด (คำศัพท์) และการ์ดความหมาย
+  function createCard(text, type, key) {
+    // type: "word" | "meaning"
+    const el = document.createElement("div");
+    el.className = `mg-card mg-card-${type}`;
+    el.tabIndex = 0;
+    el.dataset.type = type;
+    el.dataset.key = key; // key เพื่อเช็ค match
+    el.innerText = text;
+    // accessibility
+    el.setAttribute("role", "button");
+    el.setAttribute("aria-pressed", "false");
+    return el;
+  }
+
+  // สร้าง layout เบื้องต้น
+  function createGameShell(container) {
+    container.innerHTML = "";
+    const header = document.createElement("div");
+    header.className = "mg-header";
+    header.innerHTML = `<div class="mg-score">คะแนน: <span id="mg-score">0</span></div>
+                        <div class="mg-controls"><button id="mg-reset-btn">รีเซ็ต</button></div>`;
+    const board = document.createElement("div");
+    board.className = "mg-board";
+    board.id = "mg-board";
+    container.appendChild(header);
+    container.appendChild(board);
+    return board;
+  }
+
+  // ฟังก์ชันหลักเพื่อ render เกม
+  function renderMatchingGame(containerId, options = {}) {
+    const container = document.getElementById(containerId);
+    if (!container) {
+      console.warn("renderMatchingGame: ไม่พบ container id=", containerId);
+      return;
+    }
+    if (typeof hardWords === "undefined" || !hardWords) {
+      container.innerHTML = "<div class='mg-error'>ไม่มีคำศัพท์ (hardWords) ให้สร้างเกม</div>";
+      return;
+    }
+
+    // เตรียมข้อมูล: สร้าง array ของ keys และความหมายจาก hardWords
+    const keys = Object.keys(hardWords);
+    // ถ้า keys น้อยกว่า 2 ไม่สร้างเกม
+    if (keys.length < 2) {
+      container.innerHTML = "<div class='mg-error'>คำศัพท์ไม่เพียงพอสำหรับเกมจับคู่</div>";
+      return;
+    }
+
+    // สร้าง shell
+    const board = createGameShell(container);
+
+    // สร้างรายการคำ (word cards) และความหมาย (meaning cards)
+    const words = keys.map(k => ({ key: k, text: k }));
+    const meanings = keys.map(k => ({ key: k, text: hardWords[k].meaning }));
+
+    // สุ่มลำดับ
+    const shuffledWords = shuffleArray(words);
+    const shuffledMeanings = shuffleArray(meanings);
+
+    // สร้าง DOM cards
+    const wordColumn = document.createElement("div");
+    wordColumn.className = "mg-column mg-column-words";
+    const meaningColumn = document.createElement("div");
+    meaningColumn.className = "mg-column mg-column-meanings";
+
+    shuffledWords.forEach(item => {
+      const card = createCard(item.text, "word", item.key);
+      wordColumn.appendChild(card);
+    });
+    shuffledMeanings.forEach(item => {
+      const card = createCard(item.text, "meaning", item.key);
+      meaningColumn.appendChild(card);
+    });
+
+    // วางคอลัมน์ลงบอร์ด
+    board.appendChild(wordColumn);
+    board.appendChild(meaningColumn);
+
+    // สไตล์เร่งด่วน (ถ้าไม่มี CSS เฉพาะ) — คุณสามารถเอาไปใส่ใน styles.css แทนได้
+    if (!document.getElementById("mg-inline-styles")) {
+      const style = document.createElement("style");
+      style.id = "mg-inline-styles";
+      style.innerHTML = `
+        .mg-board { display:flex; gap:1rem; margin-top:1rem; }
+        .mg-column { flex:1; display:flex; flex-direction:column; gap:0.5rem; }
+        .mg-card { background:#fff; padding:0.6rem; border-radius:0.5rem; box-shadow:0 2px 6px rgba(0,0,0,0.06); cursor:pointer; user-select:none; }
+        .mg-card:focus { outline:2px solid #60a5fa; }
+        .mg-card.matched { background: #ecfccb; color:#065f46; font-weight:700; cursor:default; }
+        .mg-card.disabled { opacity:0.5; pointer-events:none; }
+        .mg-header { display:flex; justify-content:space-between; align-items:center; gap:1rem; }
+        .mg-score { font-weight:700; }
+        .mg-controls button { padding:0.4rem 0.8rem; border-radius:6px; border:none; background:#2563eb; color:#fff; cursor:pointer;}
+      `;
+      document.head.appendChild(style);
+    }
+
+    // Logic: เลือกการ์ด (click-to-select pair matching)
+    let firstSelection = null;
+    let lockBoard = false;
+    let score = 0;
+    const scoreEl = container.querySelector("#mg-score");
+    const resetBtn = container.querySelector("#mg-reset-btn");
+
+    function setScore(n) {
+      score = n;
+      if (scoreEl) scoreEl.innerText = String(score);
+    }
+
+    function resetBoard() {
+      // รีเซ็ต card classes และ counters
+      firstSelection = null;
+      lockBoard = false;
+      setScore(0);
+      // รี-enable cards
+      container.querySelectorAll(".mg-card").forEach(c => {
+        c.classList.remove("matched", "disabled");
+        c.setAttribute("aria-pressed", "false");
+      });
+      // รีเซ็ต wrongCounts ของ hwHelpers ถ้าต้องการ (ไม่ลบภาพที่ถูกเผย)
+      if (window.hwHelpers && typeof window.hwHelpers.resetWrongCounts === "function") {
+        window.hwHelpers.resetWrongCounts();
+      }
+    }
+
+    // เมื่อตอบผิด: เรียก hwHelpers.incrementWrongCount สำหรับ key ของความหมาย/คำที่เกี่ยวข้อง
+    function handleWrongAttempt(key) {
+      if (window.hwHelpers && typeof window.hwHelpers.incrementWrongCount === "function") {
+        // เรียก 2 ครั้งขึ้นไปเพื่อให้ hwHelpers เปิดรูป (hwHelpers จะนับและเปิดรูปเมื่อ >=2)
+        window.hwHelpers.incrementWrongCount(key);
+      }
+    }
+
+    // เมื่อตอบถูก
+    function handleMatch(cardA, cardB) {
+      cardA.classList.add("matched", "disabled");
+      cardB.classList.add("matched", "disabled");
+      cardA.setAttribute("aria-pressed", "true");
+      cardB.setAttribute("aria-pressed", "true");
+      setScore(score + (hardWords[cardA.dataset.key] ? hardWords[cardA.dataset.key].points : 5));
+      // ตรวจว่าเกมจบหรือยัง (ทุก key matched)
+      const unmatched = container.querySelectorAll(".mg-card:not(.matched)");
+      if (!unmatched || unmatched.length === 0) {
+        // จบเกม
+        if (options.onFinish && typeof options.onFinish === "function") {
+          options.onFinish({ score });
+        } else {
+          // แสดง modal/alert เบา ๆ (ถ้าไม่มี UI ขั้นสูง)
+          setTimeout(() => alert(`จบเกม! คะแนนรวม ${score}`), 200);
+        }
+      }
+    }
+
+    // ผูกคลิกให้การ์ด
+    container.querySelectorAll(".mg-card").forEach(card => {
+      card.addEventListener("click", () => {
+        if (lockBoard || card.classList.contains("matched") || card.classList.contains("disabled")) return;
+        // ถ้ายังไม่มีการเลือกตัวแรก ให้เลือก
+        if (!firstSelection) {
+          firstSelection = card;
+          card.classList.add("selected");
+          card.setAttribute("aria-pressed", "true");
+          return;
+        }
+        // ถ้าเลือกตัวเดียวกัน ให้ยกเลิก
+        if (firstSelection === card) {
+          firstSelection.classList.remove("selected");
+          firstSelection.setAttribute("aria-pressed", "false");
+          firstSelection = null;
+          return;
+        }
+        // เปรียบเทียบ key
+        const keyA = firstSelection.dataset.key;
+        const keyB = card.dataset.key;
+
+        // กรณี match
+        if (keyA === keyB && firstSelection.dataset.type !== card.dataset.type) {
+          handleMatch(firstSelection, card);
+          // clear selection
+          firstSelection.classList.remove("selected");
+          firstSelection = null;
+        } else {
+          // wrong attempt
+          lockBoard = true;
+          // ถ้าต้องการ ให้เรียก n ครั้งกับ wrongCounts ของคำที่เกี่ยวข้อง
+          // เราจะเรียก incrementWrongCount ด้วย keyA และ keyB (ทั้งคู่) เพื่อเป็นการให้คำใบ้ทั้งสองด้าน
+          handleWrongAttempt(keyA);
+          handleWrongAttempt(keyB);
+          // แสดง effect ผิดแล้วรีเซ็ต selection
+          setTimeout(() => {
+            firstSelection.classList.remove("selected");
+            firstSelection.setAttribute("aria-pressed", "false");
+            card.setAttribute("aria-pressed", "false");
+            firstSelection = null;
+            lockBoard = false;
+          }, 700);
+        }
+      });
+      // keyboard accessibility: Enter/Space ทำงานเหมือน click
+      card.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter" || ev.key === " ") {
+          ev.preventDefault();
+          card.click();
+        }
+      });
+    });
+
+    // รีเซ็ตปุ่ม
+    if (resetBtn) {
+      resetBtn.addEventListener("click", () => {
+        // สุ่มใหม่ลำดับคำและความหมาย
+        renderMatchingGame(containerId, options);
+      });
+    }
+
+    // ถ้าต้องการ ให้แสดงปุ่ม "เปิดคำใบ้" เพื่อทดสอบ (optional)
+    // const hintBtn = document.createElement('button'); hintBtn.innerText='เปิดคำใบ้'; hintBtn.onclick=()=>hwHelpers.revealHardwordImage(keys[0]); container.querySelector('.mg-controls').appendChild(hintBtn);
+
+    // อัปเดต score ให้เริ่มที่ 0
+    setScore(0);
+
+    // bind hwHelpers clicks again (in case dynamic content)
+    if (window.hwHelpers && typeof window.hwHelpers.bindHardwordClicks === "function") {
+      window.hwHelpers.bindHardwordClicks();
+    }
+
+    // return API สำหรับเกมนี้ (สามารถเรียกจากภายนอกได้)
+    return {
+      reset: () => renderMatchingGame(containerId, options),
+      getScore: () => score
+    };
+  }
+
+  // export ฟังก์ชันสู่ window
+  window.renderMatchingGame = renderMatchingGame;
+
+})();
+ // --- END SECTION: MATCHING GAME ---
+// --- SECTION: EVALUATE CREATIVE WRITING ---
+// ฟังก์ชันตรวจและให้คะแนนการถอดความบทโคลง
+// เวอร์ชันนี้ใช้ข้อความอ้างอิงใหม่ + ปรับเกณฑ์ประเมินตามเนื้อหาพระสุริโยทัย
+function evaluateCreativeWriting(text, type) {
+  // --- 1. Core Data (ข้อมูลหลักที่ใช้ประเมิน) ---
+  const R = "สมเด็จพระสุริโยทัย พระมเหสีของสมเด็จพระมหาจักรพรรดิ ได้แต่งองค์ทรงเครื่องเหมือนกับผู้ชายเป็นชุดออกศึกเหมือนมหาอุปราชแล้วทรงช้างเข้าร่วมรบ กองทัพหน้าของทั้งสองฝ่ายต่อสู้กัน ระหว่างช้างทรงของพระเจ้าแปร กับช้างของพระมหาจักรพรรดิ แต่ช้างของพระมหาจักรพรรดิเสียทีช้างพระเจ้าแปร พระเจ้าแปรขับช้างไล่ขวิดท้ายช้างพระที่นั่งของพระมหาจักรพรรดิ";
+
+  // คลังคำศัพท์หลัก (L) — สำหรับเช็กคำตรง/คำไวพจน์
+  const L = {
+    "สมเด็จ": ["พระ", "องค์", "เจ้า"],
+    "พระสุริโยทัย": ["วีรสตรี", "พระบรมราชเทวี", "พระมเหสี"],
+    "ทรงเครื่อง": ["แต่งองค์", "แต่งกาย", "แต่งตัว", "สวมชุด"],
+    "มหาอุปราช": ["เจ้าเมือง", "ขุนนาง", "แม่ทัพ"],
+    "ทรงช้าง": ["ขี่ช้าง", "ประทับช้าง"],
+    "ต่อสู้": ["รบ", "โรมรัน", "ปะทะ"],
+    "พระเจ้าแปร": ["กษัตริย์มอญ", "ข้าศึก", "อริ"],
+    "พระมหาจักรพรรดิ": ["กษัตริย์อยุธยา", "พระเจ้าอยู่หัว", "องค์เหนือหัว"],
+    "ขับ": ["บังคับ", "เร่ง", "ควบ"],
+    "ไล่ขวิด": ["พุ่ง", "แทง", "ชน"],
+    "พระที่นั่ง": ["คอช้าง", "แท่นที่ประทับ"]
+  };
+
+  // ประเด็นสำคัญ (C) สำหรับให้คะแนนความเข้าใจเนื้อหา
+  const C = [
+    { k: "การปลอมแปลง (บทบาท)", cW: ["พระมเหสี", "ทรงเครื่อง", "มหาอุปราช", "ผู้ชาย", "ออกศึก"] },
+    { k: "การเข้าร่วมรบ", cW: ["ทรงช้าง", "เข้าร่วมรบ", "กองทัพหน้า"] },
+    { k: "บุคคลหลัก (สุริโยทัย, จักรพรรดิ, แปร)", cW: ["สมเด็จพระสุริโยทัย", "พระมหาจักรพรรดิ", "พระเจ้าแปร"] },
+    { k: "การต่อสู้/ช้าง", cW: ["ต่อสู้", "ช้างทรง", "รบ", "ช้างของพระมหาจักรพรรดิ"] },
+    { k: "การเสียที/อันตราย", cW: ["เสียที", "ไล่ขวิด", "ท้ายช้าง", "พระที่นั่ง"] }
+  ];
+
+  // --- 2. ฟังก์ชันช่วย ---
+  function lev(a, b) {  // คำนวณระยะห่างตัวอักษร (fuzzy match)
+    if (a.length === 0) return b.length;
+    if (b.length === 0) return a.length;
+    if (a === b) return 0;
+    const m = [];
+    for (let i = 0; i < b.length + 1; i++) m[i] = [i];
+    for (let j = 0; j < a.length + 1; j++) m[0][j] = j;
+    for (let i = 1; i < b.length + 1; i++) {
+      for (let j = 1; j < a.length + 1; j++) {
+        const c = a[j - 1] === b[i - 1] ? 0 : 1;
+        m[i][j] = Math.min(m[i - 1][j] + 1, m[i][j - 1] + 1, m[i - 1][j - 1] + c);
+      }
+    }
+    return m[b.length][a.length];
+  }
+
+  function thr(w) { // เกณฑ์การสะกดผิดตามความยาวคำ
+    if (w.length < 5) return 1;
+    if (w.length < 9) return 2;
+    return 3;
+  }
+
+  function tok(t) { // แยกคำและลบสัญลักษณ์
+    const ct = t.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")
+      .replace(/\s{2,}/g, " ")
+      .toLowerCase()
+      .trim();
+    return ct.split(/\s+/).filter(tk => tk.length > 0);
+  }
+
+  // --- 3. ขั้นตอนการประเมินหลัก ---
+  const stI = text.trim();
+  if (!stI) return { score: 0, feedback: "⚠️ โปรดป้อนข้อความเพื่อประเมิน" };
+
+  const rtT = tok(R);
+  const stT = tok(stI);
+  const rtU = new Set(rtT);
+
+  let wA = [];   // เก็บข้อมูลแต่ละคำ
+  let sS = 0;    // คะแนนความเข้าใจเนื้อหา
+  let typoCount = 0;
+  let cH = {};   // ตรวจว่าครอบคลุมประเด็นหลักหรือไม่
+
+  const sPC = 50 / C.length;  // 10 คะแนนต่อประเด็น
+  let sF = "📘 ความแม่นยำทางสาระสำคัญ:\n";
+
+  for (const sW of stT) {
+    let s = "m5", f = "คำนี้ไม่ตรงกับคำศัพท์หลักหรือคำไวพจน์";
+    let iCSW = false, uCW = null;
+    const t = thr(sW);
+
+    for (const cW in L) {
+      const sy = [cW].concat(L[cW]);
+      for (const tW of sy) {
+        const d = lev(sW, tW.toLowerCase());
+        if (d === 0) {
+          s = (sW === cW.toLowerCase()) ? "m1" : "m2";
+          f = (s === "m1")
+            ? `ตรงกับคำหลักในต้นฉบับ: ${cW}`
+            : `ใช้คำไวพจน์แทนได้เหมาะสม: ${cW}`;
+          iCSW = true; uCW = cW; break;
+        } else if (d <= t) {
+          s = "m3"; f = `คล้ายคำหลัก: ${tW} (สะกดใกล้เคียง)`;
+          typoCount++; iCSW = true; uCW = tW; break;
+        }
+      }
+      if (iCSW) break;
+    }
+
+    if (!iCSW && rtU.has(sW)) s = "m4";
+
+    if (iCSW) {
+      C.forEach(c => {
+        if (!cH[c.k]) {
+          for (const cW of c.cW) {
+            if (sW.includes(cW.toLowerCase())) {
+              cH[c.k] = true; break;
+            }
+          }
+        }
+      });
+    }
+    wA.push({ w: sW, s: s, f: f });
+  }
+
+  // --- 4. สรุปผลคะแนน ---
+  const hC = Object.keys(cH).length;
+  sS = Math.min(50, Math.round(hC * sPC));
+
+  C.forEach(c => {
+    sF += cH[c.k]
+      ? `✓ ${c.k}: ครอบคลุม\n`
+      : `✗ ${c.k}: ขาดสาระสำคัญ\n`;
+  });
+
+  // ประเมินความสร้างสรรค์ (ลดคะแนนถ้าเขียนซ้ำต้นฉบับ)
+  const uOS = new Set(wA.filter(w => w.s === "m4" || w.s === "m1").map(w => w.w));
+  const sUS = new Set(stT).size;
+  const oR = sUS > 0 ? uOS.size / sUS : 0;
+  let pS = Math.round(50 * (1 - oR));
+  pS = Math.max(0, Math.min(50, pS));
+
+  const totalWords = stT.length;
+  const typoThreshold = 0.1;
+  const maxPenalty = 5;
+  let typoPenalty = 0;
+  let typoFeedback = "";
+
+  if (totalWords > 5 && (typoCount / totalWords) > typoThreshold) {
+    typoPenalty = Math.min(maxPenalty, Math.round(((typoCount / totalWords) - typoThreshold) * 50));
+    typoFeedback = `⚠️ พบคำสะกดผิด ${typoCount} คำ (หัก ${typoPenalty} คะแนน)\n`;
+  } else if (typoCount > 0) {
+    typoFeedback = `☑️ มีคำสะกดผิดเล็กน้อย ${typoCount} คำ (ไม่หักคะแนน)\n`;
+  }
+
+  // รวมคะแนน
+  const tS = sS + pS - typoPenalty;
+  const oP = (oR * 100).toFixed(0);
+
+  let qF = "\n📗 คุณภาพการถอดความ:\n";
+  if (oR > 0.6) qF += `✗ ซ้ำกับต้นฉบับมากเกินไป (${oP}%)\n`;
+  else if (oR >= 0.3) qF += `△ ปานกลาง (${oP}%)\n`;
+  else qF += `✓ ดีมาก (${oP}%)\n`;
+
+  let co = `\n📊 สรุปคะแนนรวม: ${tS} คะแนน\n`;
+  if (tS >= 80) co += "ผลงานดีมาก เข้าใจเนื้อหาและใช้ภาษาของตนเองได้ดี";
+  else if (tS >= 60) co += "ผลงานดี แต่ควรเพิ่มการปรับโครงสร้างประโยค";
+  else co += "ควรฝึกการใช้คำไวพจน์และจับใจความให้ครบถ้วน";
+
+  return {
+    totalScore: Math.max(0, tS),
+    semanticScore: sS,
+    paraphrasingScore: pS,
+    wordAnalysis: wA,
+    feedback: sF + typoFeedback + qF + co
+  };
+}
+// --- END SECTION: EVALUATE CREATIVE WRITING ---
+// --- SECTION: SHOW WRITING FEEDBACK (replace existing feedback renderer) ---
+/**
+ * แสดงผลการประเมินการถอดความ
+ * - type: string (เช่น 'interpretation' หรือ 'imagination') — ไม่ได้บังคับระบบ ใช้เพื่อแยกช่องแสดงผลถ้าต้องการ
+ * - evaluation: object ที่ได้จาก evaluateCreativeWriting(...)
+ * - opts: optional { containerId: 'writing-feedback', concise: false }
+ */
+function showWritingFeedback(type, evaluation, opts = {}) {
+  const containerId = opts.containerId || 'writing-feedback';
+  let container = document.getElementById(containerId);
+
+  // ถ้า container ยังไม่มี ให้สร้าง element และต่อท้าย body
+  if (!container) {
+    container = document.createElement('section');
+    container.id = containerId;
+    container.setAttribute('aria-live', 'polite');
+    container.style.maxWidth = '820px';
+    container.style.margin = '1rem auto';
+    container.style.padding = '1rem';
+    container.style.borderRadius = '0.75rem';
+    container.style.background = '#ffffff';
+    container.style.boxShadow = '0 6px 18px rgba(0,0,0,0.06)';
+    // ให้พื้นที่นี้สร้างเนื้อหา
+    document.body.appendChild(container);
+  }
+
+  // ปลอดภัย: ถ้า evaluation ไม่ถูกส่งมา
+  if (!evaluation || typeof evaluation !== 'object') {
+    container.innerHTML = `<div style="color:#b91c1c;font-weight:600">ไม่มีผลการประเมิน</div>`;
+    return;
+  }
+
+  // ชุดข้อมูลจาก evaluation
+  const totalScore = typeof evaluation.totalScore !== 'undefined' ? evaluation.totalScore : (evaluation.score || 0);
+  const semanticScore = evaluation.semanticScore || 0;
+  const paraphrasingScore = evaluation.paraphrasingScore || 0;
+  const wordAnalysis = Array.isArray(evaluation.wordAnalysis) ? evaluation.wordAnalysis : [];
+  const feedback = evaluation.feedback || '';
+
+  // สร้าง HTML ของส่วนแสดงผล
+  // หลีกเลี่ยง innerHTML ที่รับจากภายนอกโดยตรง (ยกเว้น feedback ที่มาจากระบบ) — แปลงอย่างปลอดภัยก่อนแสดง
+  function safeHtml(str = '') {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;")
+      .replace(/\n/g, '<br>');
+  }
+
+  // สีแถบคะแนนตามระดับ
+  function scoreColor(score) {
+    if (score >= 80) return '#16a34a';      // เขียว
+    if (score >= 60) return '#f59e0b';      // เหลือง
+    return '#ef4444';                       // แดง
+  }
+
+  // สร้างส่วน header (คะแนนรวม + แถบ)
+  const headerHtml = `
+    <div style="display:flex;flex-direction:row;justify-content:space-between;align-items:center;gap:1rem;">
+      <div style="flex:1">
+        <h3 style="margin:0 0 0.25rem 0;font-size:1.05rem">ผลการประเมิน: ${safeHtml(type || 'การถอดความ')}</h3>
+        <div style="font-size:0.95rem;color:#444">คะแนนรวม: <strong style="font-size:1.25rem">${safeHtml(totalScore)}</strong></div>
+        <div aria-hidden="true" style="height:0.5rem"></div>
+        <div style="background:#eee;border-radius:999px;overflow:hidden;height:12px;">
+          <div style="width:${Math.max(0, Math.min(100, totalScore))}%;height:12px;background:${scoreColor(totalScore)};transition:width 0.4s;"></div>
+        </div>
+      </div>
+
+      <div style="min-width:220px;text-align:right">
+        <div style="font-size:0.85rem;color:#666">เชิงสาระ: <strong>${safeHtml(semanticScore)}</strong></div>
+        <div style="font-size:0.85rem;color:#666">การถอดความ: <strong>${safeHtml(paraphrasingScore)}</strong></div>
+      </div>
+    </div>
+  `;
+
+  // สร้างตารางสรุป wordAnalysis (ถ้ามี)
+  let wordAnalysisHtml = '';
+  if (wordAnalysis.length > 0) {
+    wordAnalysisHtml += `
+      <div style="margin-top:0.9rem">
+        <div style="font-weight:700;margin-bottom:0.4rem">สรุปการตรวจคำ (การวิเคราะห์คำทีละคำ)</div>
+        <table style="width:100%;border-collapse:collapse;font-size:0.95rem;">
+          <thead>
+            <tr style="text-align:left;color:#444">
+              <th style="padding:0.4rem 0.6rem 0.4rem 0">คำ</th>
+              <th style="padding:0.4rem 0.6rem">สถานะ</th>
+              <th style="padding:0.4rem 0.6rem">คำแนะนำ</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
+    for (const wa of wordAnalysis) {
+      const statusMap = {
+        'm1': 'ตรงกับคำหลัก',
+        'm2': 'ใช้คำไวพจน์ที่เหมาะสม',
+        'm3': 'สะกดใกล้เคียง (ควรตรวจสอบ)',
+        'm4': 'ซ้ำกับต้นฉบับ',
+        'm5': 'คำไม่ตรง/ไม่รู้จัก'
+      };
+      const stLabel = statusMap[wa.s] || wa.s;
+      wordAnalysisHtml += `
+        <tr>
+          <td style="padding:0.45rem 0.6rem;border-top:1px solid #f3f3f3">${safeHtml(wa.w)}</td>
+          <td style="padding:0.45rem 0.6rem;border-top:1px solid #f3f3f3">${safeHtml(stLabel)}</td>
+          <td style="padding:0.45rem 0.6rem;border-top:1px solid #f3f3f3;color:#555">${safeHtml(wa.f)}</td>
+        </tr>
+      `;
+    }
+    wordAnalysisHtml += `</tbody></table></div>`;
+  }
+
+  // ส่วน feedback แบบข้อความ (ยาว) — มาจาก evaluator (แสดงแบบ safe)
+  const feedbackHtml = `
+    <div style="margin-top:0.9rem">
+      <div style="font-weight:700;margin-bottom:0.3rem">ข้อเสนอแนะ/คำอธิบาย</div>
+      <div style="color:#333;font-size:0.95rem;line-height:1.5">${safeHtml(feedback)}</div>
+    </div>
+  `;
+
+  // ปุ่มช่วย (ปิด / คัดลอก feedback)
+  const controlsHtml = `
+    <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:0.8rem">
+      <button id="${containerId}-copy-btn" style="background:#10b981">คัดลอกคำแนะนำ</button>
+      <button id="${containerId}-close-btn" style="background:#ef4444">ปิด</button>
+    </div>
+  `;
+
+  // รวม HTML ทั้งหมดและใส่ลง container
+  container.innerHTML = headerHtml + wordAnalysisHtml + feedbackHtml + controlsHtml;
+
+  // ผูกเหตุการณ์ให้ปุ่ม
+  const closeBtn = document.getElementById(`${containerId}-close-btn`);
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      container.style.display = 'none';
+    });
+  }
+
+  const copyBtn = document.getElementById(`${containerId}-copy-btn`);
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      const textToCopy = `${type || 'การถอดความ'} — คะแนน: ${totalScore}\n\n${feedback}\n`;
+      try {
+        navigator.clipboard.writeText(textToCopy);
+        copyBtn.innerText = 'คัดลอกแล้ว';
+        setTimeout(() => copyBtn.innerText = 'คัดลอกคำแนะนำ', 1500);
+      } catch (e) {
+        // fallback: select and prompt
+        const ta = document.createElement('textarea');
+        ta.value = textToCopy;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); copyBtn.innerText = 'คัดลอกแล้ว'; }
+        catch (err) { alert('ไม่สามารถคัดลอกอัตโนมัติได้'); }
+        document.body.removeChild(ta);
+        setTimeout(() => copyBtn.innerText = 'คัดลอกคำแนะนำ', 1500);
+      }
+    });
+  }
+
+  // ทำให้ container มองเห็นและเลื่อนเข้า view ถ้าซ่อนอยู่
+  container.style.display = 'block';
+  container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+// --- END SECTION: SHOW WRITING FEEDBACK ---
+// --- SECTION: STEP 3 HANDLERS (evaluation trigger + event binding) ---
+//
+// ฟังก์ชันนี้เชื่อม input พิมพ์ข้อความของนักเรียนกับระบบตรวจคะแนน (evaluateCreativeWriting)
+// พร้อมแสดงผลด้วย showWritingFeedback()
+// 
+// ⚙️ ต้องมี: evaluateCreativeWriting() และ showWritingFeedback() (จาก Section 8–9)
+
+function setupStep3Handlers() {
+  const inputId = 'student-writing-input';     // id ของช่องพิมพ์ข้อความนักเรียน
+  const btnId = 'evaluate-btn';                // id ของปุ่ม "ตรวจคำตอบ"
+  const resultContainerId = 'writing-feedback'; // id ที่จะใช้แสดงผล
+
+  // --- 1. ตรวจสอบว่า element มีอยู่ไหม ---
+  const inputEl = document.getElementById(inputId);
+  const evalBtn = document.getElementById(btnId);
+
+  if (!inputEl || !evalBtn) {
+    console.warn('[setupStep3Handlers] ❌ ไม่พบ input หรือปุ่มในหน้า');
+    return;
+  }
+
+  // --- 2. ผูกเหตุการณ์ “คลิกปุ่มตรวจคำตอบ” ---
+  evalBtn.addEventListener('click', () => {
+    const studentText = inputEl.value.trim();
+    if (!studentText) {
+      alert('⚠️ โปรดพิมพ์ข้อความก่อนตรวจคะแนน');
+      return;
+    }
+
+    // เรียกใช้ฟังก์ชันประเมิน
+    const result = evaluateCreativeWriting(studentText, 'interpretation');
+    // แสดงผลการประเมิน
+    showWritingFeedback('interpretation', result, { containerId: resultContainerId });
+  });
+
+  // --- 3. ตัวเลือกเสริม: ตรวจอัตโนมัติเมื่อพิมพ์ครบ 10 ตัวอักษรขึ้นไป ---
+  let autoTimeout = null;
+  inputEl.addEventListener('input', () => {
+    const val = inputEl.value.trim();
+    if (val.length < 10) return; // ยังไม่ประเมินถ้าน้อยกว่า 10 ตัวอักษร
+
+    // debounce 800ms (พิมพ์หยุดเกิน 0.8 วินาทีค่อยประเมิน)
+    clearTimeout(autoTimeout);
+    autoTimeout = setTimeout(() => {
+      const result = evaluateCreativeWriting(val, 'interpretation');
+      showWritingFeedback('interpretation', result, { containerId: resultContainerId });
+    }, 800);
+  });
+
+  console.log('[setupStep3Handlers] ✅ ระบบประเมินพร้อมใช้งานแล้ว');
+}
+
+// --- เรียกใช้งานเมื่อโหลดหน้าเสร็จ ---
+document.addEventListener('DOMContentLoaded', setupStep3Handlers);
+// --- END SECTION: STEP 3 HANDLERS ---
+// --- SECTION: MODAL / NAV / UI COMPONENTS ---
+// Modal UI helper: สร้าง modal overlay + content area และ expose API สำหรับเปิด/ปิด
+(function () {
+  // ถ้า modal ถูกสร้างแล้ว ให้ไม่สร้างซ้ำ
+  if (document.getElementById('eval-modal-root')) return;
+
+  // สร้าง overlay + modal container
+  const modalRoot = document.createElement('div');
+  modalRoot.id = 'eval-modal-root';
+  modalRoot.setAttribute('aria-hidden', 'true');
+  modalRoot.innerHTML = `
+    <div id="eval-modal-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:9998;opacity:0;pointer-events:none;transition:opacity .18s;"></div>
+    <div id="eval-modal" role="dialog" aria-modal="true" aria-labelledby="eval-modal-title" style="position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.98);min-width:300px;max-width:900px;width:90%;background:#fff;border-radius:10px;padding:1rem 1rem 1.25rem;box-shadow:0 20px 50px rgba(2,6,23,0.4);z-index:9999;opacity:0;pointer-events:none;transition:opacity .18s, transform .18s;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;">
+        <h3 id="eval-modal-title" style="margin:0;font-size:1.05rem">ผลการประเมิน</h3>
+        <div style="display:flex;gap:0.5rem">
+          <button id="eval-modal-copy" aria-label="คัดลอก" style="background:#10b981;color:#fff;border:none;padding:0.4rem 0.6rem;border-radius:6px;cursor:pointer">คัดลอก</button>
+          <button id="eval-modal-close" aria-label="ปิด" style="background:#ef4444;color:#fff;border:none;padding:0.4rem 0.6rem;border-radius:6px;cursor:pointer">ปิด</button>
+        </div>
+      </div>
+      <div id="eval-modal-body" style="margin-top:0.8rem;max-height:60vh;overflow:auto"></div>
+    </div>
+  `;
+  document.body.appendChild(modalRoot);
+
+  // เพิ่ม inline styles (ถ้ายังไม่มี) เพื่อความสวยเล็กน้อย — คุณสามารถย้ายไปไฟล์ CSS ได้
+  if (!document.getElementById('eval-modal-styles')) {
+    const s = document.createElement('style');
+    s.id = 'eval-modal-styles';
+    s.innerHTML = `
+      #eval-modal-root.show #eval-modal-overlay { opacity:1; pointer-events:auto; }
+      #eval-modal-root.show #eval-modal { opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); }
+      /* responsive */
+      @media (max-width:520px) {
+        #eval-modal { padding:0.8rem; width:96%; }
+        #eval-modal-body { font-size:0.95rem; }
+      }
+      /* small helper for content */
+      .eval-score-badge { display:inline-block;padding:0.25rem .6rem;border-radius:999px;font-weight:700;background:#eef2ff;color:#1e3a8a;margin-left:0.6rem; }
+      .eval-section { margin-bottom:0.6rem; }
+      .eval-word-row { display:flex;gap:0.6rem;padding:0.45rem 0;border-top:1px solid #f3f3f3;align-items:flex-start; }
+      .eval-word-row:first-child { border-top:0; }
+    `;
+    document.head.appendChild(s);
+  }
+
+  // element refs
+  const root = document.getElementById('eval-modal-root');
+  const overlay = document.getElementById('eval-modal-overlay');
+  const modal = document.getElementById('eval-modal');
+  const body = document.getElementById('eval-modal-body');
+  const closeBtn = document.getElementById('eval-modal-close');
+  const copyBtn = document.getElementById('eval-modal-copy');
+
+  // helper: clear content
+  function clearModal() { body.innerHTML = ''; }
+
+  // helper: render evaluation object into modal body (safe)
+  function renderEvaluationToModal(evaluation, type = 'การถอดความ') {
+    if (!evaluation) {
+      body.innerHTML = `<div style="color:#b91c1c">ไม่มีข้อมูลการประเมิน</div>`;
+      return;
+    }
+    const total = (typeof evaluation.totalScore !== 'undefined') ? evaluation.totalScore : (evaluation.score || 0);
+    const sem = evaluation.semanticScore || 0;
+    const para = evaluation.paraphrasingScore || 0;
+    const feedback = (evaluation.feedback || '').replace(/\n/g,'<br>');
+    const wordAnalysis = Array.isArray(evaluation.wordAnalysis) ? evaluation.wordAnalysis : [];
+
+    // header
+    let html = `<div class="eval-section"><strong>${escapeHtml(type)}</strong>
+      <span class="eval-score-badge">${escapeHtml(String(total))} คะแนน</span>
+      <div style="color:#444;margin-top:0.35rem;font-size:0.95rem">เชิงสาระ: ${escapeHtml(String(sem))} &nbsp;|&nbsp; ถอดความ: ${escapeHtml(String(para))}</div>
+      </div>`;
+
+    // feedback
+    html += `<div class="eval-section"><div style="font-weight:700;margin-bottom:0.3rem">ข้อเสนอแนะ</div><div style="color:#333;line-height:1.5">${feedback}</div></div>`;
+
+    // wordAnalysis (compact list)
+    if (wordAnalysis.length) {
+      html += `<div class="eval-section"><div style="font-weight:700;margin-bottom:0.3rem">สรุปคำที่ตรวจ</div>`;
+      html += `<div>`;
+      for (const wa of wordAnalysis) {
+        const stLabel = (wa.s === 'm1' && 'ตรงกับคำหลัก') || (wa.s === 'm2' && 'ไวพจน์') || (wa.s === 'm3' && 'สะกดใกล้เคียง') || (wa.s === 'm4' && 'ซ้ำต้นฉบับ') || 'ไม่ตรง';
+        html += `<div class="eval-word-row"><div style="min-width:110px;font-weight:600">${escapeHtml(wa.w)}</div><div style="color:#444">${escapeHtml(stLabel)}</div><div style="color:#666;flex:1">${escapeHtml(wa.f)}</div></div>`;
+      }
+      html += `</div></div>`;
+    }
+
+    // attach
+    body.innerHTML = html;
+  }
+
+  // small helper to escape html
+  function escapeHtml(str='') {
+    return String(str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+  }
+
+  // open modal
+  function openModal() {
+    root.classList.add('show');
+    root.setAttribute('aria-hidden','false');
+    // set focus into modal for a11y
+    modal.setAttribute('tabindex','-1');
+    modal.focus();
+  }
+
+  // close modal
+  function closeModal() {
+    root.classList.remove('show');
+    root.setAttribute('aria-hidden','true');
+    clearModal();
+  }
+
+  // click overlay closes
+  overlay.addEventListener('click', closeModal);
+  closeBtn.addEventListener('click', closeModal);
+
+  // keyboard: Esc closes
+  document.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Escape' && root.classList.contains('show')) {
+      closeModal();
+    }
+  });
+
+  // copy button: คัดลอก feedback text (fallbacks included)
+  copyBtn.addEventListener('click', () => {
+    const text = body.innerText || body.textContent || '';
+    if (!text) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        copyBtn.innerText = 'คัดลอกแล้ว';
+        setTimeout(() => copyBtn.innerText = 'คัดลอก', 1400);
+      });
+    } else {
+      const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); copyBtn.innerText = 'คัดลอกแล้ว'; setTimeout(() => copyBtn.innerText = 'คัดลอก', 1400); } catch(e){ alert('ไม่สามารถคัดลอกอัตโนมัติ'); }
+      document.body.removeChild(ta);
+    }
+  });
+
+  // Public API: showFeedbackModal(evaluation, type, opts)
+  // opts: { autoScrollToModal:Boolean (default true) }
+  function showFeedbackModal(evaluation, type='การถอดความ', opts = {}) {
+    renderEvaluationToModal(evaluation, type);
+    openModal();
+    if (opts.autoScrollToModal !== false) modal.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // expose to global
+  window.showFeedbackModal = showFeedbackModal;
+  window.closeFeedbackModal = closeModal;
+
+  // USAGE NOTE (for developer):
+  // - เพื่อให้ modal เปิดอัตโนมัติเมื่อเรียก showWritingFeedback(...) ให้เพิ่มบรรทัด:
+  //     showFeedbackModal(evaluation, type);
+  //   ที่ส่วนท้ายของฟังก์ชัน showWritingFeedback (Section 9) หรือเรียกแยกหลังได้:
+  //     const res = evaluateCreativeWriting(text); showWritingFeedback('interpretation', res); showFeedbackModal(res, 'interpretation');
+})();
+ // --- END SECTION: MODAL / NAV / UI COMPONENTS ---
+<!-- --- SECTION: FOOTER HELPERS / PERSISTENCE / DEBUG (replace or append near end of body) --- -->
+<script>
+/*
+  Footer helpers:
+  - persistence for hwHelpers wrongCounts (optional)
+  - simple app-level API (appHelpers) for debug and test
+  - responsive & accessibility small fixes
+  Place this block near the end of the body (before </body>)
+*/
+
+(function(){
+  // config: set to false หากไม่ต้องการเก็บสถานะลง localStorage
+  const PERSIST_WRONGCOUNTS = true;
+  const STORAGE_KEY = 'kw_hw_wrongCounts_v1';
+
+  // helper: safe access to hwHelpers
+  function getHwHelpers() {
+    return window.hwHelpers || null;
+  }
+
+  // Load persisted wrongCounts -> ถ้า hwHelpers มีเมธอด reset/get จะใช้เพื่อโหลดค่า
+  function loadWrongCounts() {
+    if (!PERSIST_WRONGCOUNTS) return;
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const obj = JSON.parse(raw || '{}');
+      // ถ้า hwHelpers มี API internal ให้ใช้ (เรามี _debug_getWrongCounts และ resetWrongCounts)
+      const hh = getHwHelpers();
+      if (hh && typeof hh.resetWrongCounts === 'function' && typeof hh._debug_getWrongCounts === 'function') {
+        // reset internal then increment per loaded counts
+        hh.resetWrongCounts();
+        Object.keys(obj).forEach(word => {
+          const count = Number(obj[word] || 0);
+          for (let i=0;i<count;i++) {
+            // incrementWrongCount available? ถ้าไม่มี เราจะแพทช์โดยเรียก revealHardwordImage เมื่อ count>=2
+            if (typeof hh.incrementWrongCount === 'function') hh.incrementWrongCount(word);
+          }
+        });
+      }
+    } catch (e) {
+      console.warn('loadWrongCounts failed', e);
+    }
+  }
+
+  // Save wrongCounts from hwHelpers._debug_getWrongCounts() into localStorage
+  function saveWrongCounts() {
+    if (!PERSIST_WRONGCOUNTS) return;
+    try {
+      const hh = getHwHelpers();
+      if (!hh || typeof hh._debug_getWrongCounts !== 'function') return;
+      const counts = hh._debug_getWrongCounts();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(counts || {}));
+    } catch (e) {
+      console.warn('saveWrongCounts failed', e);
+    }
+  }
+
+  // Periodic autosave (every 6s) to persist counts
+  let autosaveInterval = null;
+  function startAutoSave() {
+    if (!PERSIST_WRONGCOUNTS) return;
+    if (autosaveInterval) clearInterval(autosaveInterval);
+    autosaveInterval = setInterval(saveWrongCounts, 6000);
+  }
+  function stopAutoSave() {
+    if (autosaveInterval) { clearInterval(autosaveInterval); autosaveInterval = null; }
+  }
+
+  // APP HELPERS (exposed as window.appHelpers)
+  const appHelpers = {
+    // debug
+    getWrongCounts() {
+      const hh = getHwHelpers();
+      if (hh && typeof hh._debug_getWrongCounts === 'function') return hh._debug_getWrongCounts();
+      return {};
+    },
+    resetWrongCounts() {
+      const hh = getHwHelpers();
+      if (hh && typeof hh.resetWrongCounts === 'function') hh.resetWrongCounts();
+      // clear persisted storage too
+      try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+    },
+    revealAllHardwordImages() {
+      const hh = getHwHelpers();
+      if (!hh) return;
+      Object.keys(window.hardWords || {}).forEach(k => {
+        if (typeof hh.revealHardwordImage === 'function') hh.revealHardwordImage(k);
+      });
+    },
+    saveNow() { saveWrongCounts(); },
+    loadNow() { loadWrongCounts(); }
+  };
+
+  // expose
+  window.appHelpers = appHelpers;
+
+  // init: load persisted and start autosave
+  if (PERSIST_WRONGCOUNTS) {
+    try {
+      // small delay to allow hwHelpers to init first
+      setTimeout(() => {
+        loadWrongCounts();
+        startAutoSave();
+      }, 250);
+    } catch(e){}
+  }
+
+  // small UX: focus trap for modal (improve a11y slightly)
+  // if modal exists, ensure tab doesn't escape modal when open (lightweight)
+  document.addEventListener('keydown', function(ev){
+    try {
+      const root = document.getElementById('eval-modal-root');
+      if (!root || !root.classList.contains('show')) return;
+      if (ev.key === 'Tab') {
+        const focusables = root.querySelectorAll('button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])');
+        if (!focusables || focusables.length === 0) return;
+        const focusArr = Array.prototype.slice.call(focusables);
+        const current = document.activeElement;
+        const idx = focusArr.indexOf(current);
+        if (ev.shiftKey) {
+          // shift+tab
+          if (idx === 0) { ev.preventDefault(); focusArr[focusArr.length-1].focus(); }
+        } else {
+          if (idx === focusArr.length - 1) { ev.preventDefault(); focusArr[0].focus(); }
+        }
+      }
+    } catch(e){}
+  });
+
+  // small responsive CSS additions: inject if not present
+  if (!document.getElementById('footer-helper-styles')) {
+    const s = document.createElement('style');
+    s.id = 'footer-helper-styles';
+    s.innerHTML = `
+      /* Footer helper responsive tweaks */
+      @media (max-width:420px) {
+        .kloang-container { padding: 0.75rem; font-size: 0.95rem; }
+        .wak-na { min-width: 90px; font-size:0.95rem; }
+        .hardword { font-size:0.98rem; }
+        #hardword-info { font-size:0.95rem; padding:0.6rem; }
+      }
+      /* small improvement for mg-board on narrow screens */
+      @media (max-width:720px) {
+        .mg-board { flex-direction:column; }
+      }
+    `;
+    document.head.appendChild(s);
+  }
+
+  // safety: before unload save once
+  window.addEventListener('beforeunload', saveWrongCounts);
+
+  // debug log
+  console.log('[appHelpers] initialized. window.appHelpers available. PERSIST_WRONGCOUNTS=', PERSIST_WRONGCOUNTS);
+})();
+</script>
+<!-- --- END SECTION: FOOTER HELPERS --- -->
