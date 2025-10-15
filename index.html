@@ -1421,48 +1421,70 @@
                         </div>
                     `
                 },
-                // --- แทนที่ค่า mission.poem เดิม ด้วยบทอ่านใหม่ของผู้ใช้ ---
-poem: `<div class="kloang-container">
-    <div class="bart">
-        <span class="wak-na">๏ บังอรอัคเรศผู้ พิสมัย ท่านนา</span>
-    </div>
+                poem: `<div class="kloang-container">
+  <div class="bart">
+    <span class="wak-na">๏ บังอรอัคเรศผู้</span>
+    <span class="wak-lang">พิสมัย ท่านนา</span>
+  </div>
 
-    <div class="bart">
-        <span class="wak-na">นามพระสุริโยทัย</span>
-        <span class="wak-lang">ออกอ้าง</span>
-    </div>
+  <div class="bart">
+    <span class="wak-na">นามพระสุริโยทัย</span>
+    <span class="wak-lang">ออกอ้าง</span>
+  </div>
 
-    <div class="bart">
-        <span class="wak-na">ทรงเครื่องยุทธพิไชย</span>
-        <span class="wak-lang">เช่นอุป ราชแฮ</span>
-    </div>
+  <div class="bart">
+    <span class="wak-na">ทรงเครื่องยุทธพิไชย</span>
+    <span class="wak-lang">เช่นอุป ราชแฮ</span>
+  </div>
 
-    <div class="bart">
-        <span class="wak-na">เถลิงคชาธารคว้าง</span>
-        <span class="wak-lang">ควบเข้าขบวนไคล</span>
-    </div>
+  <div class="bart">
+    <span class="wak-na">เถลิงคชาธารคว้าง</span>
+    <span class="wak-lang">
+      ควบเข้าขบวน
+      <span class="hardword" data-word="ไคล">ไคล</span>
+    </span>
+  </div>
 
-    <div style="height:0.6rem"></div>
+  <div style="height:0.6rem"></div>
 
-    <div class="bart">
-        <span class="wak-na">๏ พลไกรกองน่าเร้า โรมรัน กันเฮย</span>
-    </div>
+  <div class="bart">
+    <span class="wak-na">๏ พลไกรกองน่าเร้า</span>
+    <span class="wak-lang">
+      <span class="hardword" data-word="โรมรัน">โรมรัน</span>
+      กันเฮย
+    </span>
+  </div>
 
-    <div class="bart">
-        <span class="wak-na">ช้างพระเจ้าแปรประจัญ</span>
-        <span class="wak-lang">คชไท้</span>
-    </div>
+  <div class="bart">
+    <span class="wak-na">ช้างพระเจ้าแปรประจัญ</span>
+    <span class="wak-lang">คชไท้</span>
+  </div>
 
-    <div class="bart">
-        <span class="wak-na">สารทรงซวดเซผัน</span>
-        <span class="wak-lang">หลังแล่น เตลิดแฮ</span>
-    </div>
+  <div class="bart">
+    <span class="wak-na">สารทรงซวดเซผัน</span>
+    <span class="wak-lang">หลังแล่น เตลิดแฮ</span>
+  </div>
 
-    <div class="bart">
-        <span class="wak-na">เตลงขับคชไล่ใกล้</span>
-        <span class="wak-lang">หวิดท้ายคชาธาร</span>
-    </div>
+  <div class="bart">
+    <span class="wak-na">เตลงขับคชไล่ใกล้</span>
+    <span class="wak-lang">
+      หวิดท้ายคชาธาร
+      <span class="hardword" data-word="หวิด">หวิด</span>
+    </span>
+  </div>
+
+  <div style="height:0.5rem"></div>
+
+  <div class="bart">
+    <span class="wak-na">
+      (<span class="hardword" data-word="ทรงเครื่อง">ทรงเครื่อง</span>,
+      <span class="hardword" data-word="พล">พล</span>)
+    </span>
+  </div>
+
+  <div id="hardword-info" style="margin-top:0.75rem;"></div>
 </div>`,
+
                 hardWords: {
                        "ทรงเครื่อง": { meaning: "แต่งตัวมีเครื่องประดับ/แต่งกายพร้อมสำหรับพิธีหรือออกศึก", points: 15 },
     "ไคล": { meaning: "เคลื่อนที่เข้าไป, ไปเข้าไป, เข้าสู่", points: 12 },
